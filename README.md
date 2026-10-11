@@ -63,14 +63,19 @@ Each algorithm is run for 100 rounds, and the results are stored in separate dir
 
 ## Plots in the Dashboard
 
-Visualizations and dashboards were created using Plotly and Dash. There is a dashboard available with the following 
+Visualizations and dashboards were created using Plotly and Dash. The dashboard shows the three experiments from the study:
 
-1. **Average Total Reward Over Time**: Displays how effectively each algorithm maximizes rewards over time.
-2. **Average Regret Over Time**: Shows how well each algorithm minimizes regret over time.
-3. **Reward Distribution**: A boxplot showing the distribution of zero and one rewards for each algorithm.
-4. **Distribution of Total Regret at Timestep 100,000**: A histogram of total regret values at timestep 1,000,000 across 100 iterations for a selected algorithm.
-5. **Value-at-Risk (VaR) Function**: Displays the VaR function for alpha values 0.01, 0.05, and 0.1, indicating the maximum potential loss at a given confidence level.
-6. **Proportion of Suboptimal Arms Pulled**: Shows the proportion of suboptimal arm selections compared to all selections up to each timestep.
+- **Scenario A (Baseline):** p1 = 0.8, p2 = 0.9
+- **Scenario B (Low-Variance Micro-Gap):** p1 = 0.895, p2 = 0.9
+- **Scenario C (High-Variance Micro-Gap):** p1 = 0.89, p2 = 0.895
+
+For each scenario it shows three line charts over time for all 16 algorithm configurations, followed by a table of the values at T = 1,000,000:
+
+1. **Average Regret**: mean total regret across the 100 trials.
+2. **Reward Variance**: sample variance of the total reward across the 100 trials.
+3. **Subopt. Ratio**: average number of suboptimal arm pulls divided by the timestep.
+
+See [docs/workflow.md](docs/workflow.md) for the full workflow from simulation to dashboard.
 
 ## Setup Instructions
 
@@ -115,7 +120,19 @@ pip install -r requirements.txt
 
 This command will install all the dependencies listed in the ```requirements.txt``` file. Ensure that all packages install without errors.
 
-## 4. Running the Dashboard
+## 4. Running the Scenario Simulations (optional)
+
+The results for all three scenarios are already stored in `data/`, so you can skip this step and go straight to the dashboard. To regenerate a scenario, run from the repository root:
+
+```bash
+python src/run_scenario.py 0.8 0.9      # Scenario A
+python src/run_scenario.py 0.895 0.9    # Scenario B
+python src/run_scenario.py 0.89 0.895   # Scenario C
+```
+
+Each command runs all 16 algorithm configurations (100 trials, T = 1,000,000, seed 42) and overwrites that scenario's results in `data/`. One scenario takes about 15–20 minutes on a 12-core machine. Run the scenarios one after another, not in parallel.
+
+## 5. Running the Dashboard
 
 Once the installation is complete, you can start the dashboard by running the following command:
 
@@ -130,6 +147,8 @@ http://127.0.0.1:8050
 ```
 
 If it doesn't open automatically, you can manually copy and paste this URL into your browser.
+
+The dashboard reads `data/` only at startup. After running a simulation, stop the dashboard (Ctrl + C) and start it again to see the new results.
 
 
 ## Reproducibility

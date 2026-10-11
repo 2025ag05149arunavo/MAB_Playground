@@ -46,9 +46,9 @@ def Greedy_simulation(arm_means, num_arms, total_steps, rng=None, **kwargs):
 
     # Simulation loop
     for t in range(1, total_steps + 1):
-        if np.random.rand() < epsilon:
+        if rng.random() < epsilon:
             # Exploration: choose a random arm
-            arm = np.random.choice(num_arms)
+            arm = rng.integers(num_arms)
         else:
             # Exploitation: choose the best arm based on Q-values
             arm = np.argmax(Q)
